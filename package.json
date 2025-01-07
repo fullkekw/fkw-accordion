@@ -4,7 +4,10 @@
   "description": "React accordion typescript component. Compatible with nextjs & vite!",
   "keywords": [
     "fkw",
-    "fullkekw"
+    "fullkekw",
+    "accordion",
+    "aria accordion",
+    "react accordion"
   ],
   "license": "MIT",
   "author": "unniiiverse",

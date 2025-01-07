@@ -10,6 +10,8 @@ import { createStringID, EFKW } from '../components/handlers';
 
 interface IAccordionContext {
   verbose: boolean
+  singleOpen: boolean
+  id: string
 }
 
 interface IItemConext {
@@ -25,21 +27,27 @@ const ItemContext = createContext<IItemConext>({});
 
 
 
-export const Accordion: React.FC<IAccordionProps> = ({ children, verbose }) => {
+export const Accordion: React.FC<IAccordionProps> = ({ children, verbose, singleOpen, id }) => {
+  const [ID] = useState(id ?? createStringID(6));
+
   verbose = verbose ?? false;
+  singleOpen = singleOpen ?? false;
 
   return <AccordionContext.Provider value={{
-    verbose
+    verbose,
+    singleOpen,
+    id: ID,
   }}>
     {children}
   </AccordionContext.Provider>;
 };
 
 /** Must contain AccordionHeader & AccordionPanel */
-export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, className, onClick, disabled, id, initialState }) => {
+export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, className, onClick, disabled, id, state, stateSetter }) => {
   const accCtx = useContext(AccordionContext);
+  const { singleOpen, verbose, id: accordionId } = accCtx;
 
-  const [isOpen, setIsOpen] = useState(initialState ?? false);
+  const [isOpen, setIsOpen] = useState(state ?? false);
   const [ID] = useState(id ?? createStringID(6));
 
   const paddingsRef = useRef<number[]>([]);
@@ -80,6 +88,24 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
     }, 1);
   }, []);
 
+  // Handle singleOpen
+  useEffect(() => {
+    if (!singleOpen) return;
+
+    const item = itemRef.current as HTMLButtonElement;
+
+    const observer = new MutationObserver(() => {
+      if (item.classList.contains('fkw-accordion--singleOpen')) {
+        item.classList.remove('fkw-accordion--singleOpen');
+        toggle(false);
+      }
+    });
+
+    observer.observe(item, {
+      attributes: true
+    });
+  }, []);
+
   // Handle isOpen
   useEffect(() => {
     const item = itemRef.current as HTMLButtonElement;
@@ -89,15 +115,44 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
 
     if (isOpen) {
       panel.style.maxHeight = `${panel.scrollHeight + (paddingY * 2)}px`;
+
+      if (singleOpen) {
+        const items = document.querySelectorAll(`[data-fkw-accordion="${accordionId}"]`) as NodeListOf<HTMLButtonElement>;
+
+        items.forEach(item => {
+          if (item.id === `fkw-accordion-item--${ID}`) return;
+
+          item.classList.add('fkw-accordion--singleOpen');
+        });
+      }
     } else {
       panel.style.maxHeight = `0px`;
     }
   }, [isOpen]);
 
+  //* Sync inner state when out changed
+  useEffect(() => {
+    if (state === undefined) return;
+
+    setIsOpen(state);
+  }, [state]);
 
 
-  function toggle() {
-    setIsOpen(prev => !prev);
+
+  function toggle(forceState?: boolean) {
+    const to = forceState ?? !isOpen;
+
+    if (stateSetter !== undefined && state !== undefined) {
+      //* Sync only out state with inner
+      stateSetter(to);
+    } else if (stateSetter !== undefined && state === undefined) {
+      //* Sync both states
+      stateSetter(to);
+      setIsOpen(to);
+    } else {
+      //* Sync only inner state with out
+      setIsOpen(to);
+    }
   }
 
 
@@ -107,7 +162,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
     toggle,
     id: ID
   }}>
-    <button className={cn(`fkw-accordion-item`, accCtx.verbose && 'fkw-accordion--verbose', className)} onClick={() => { toggle(), onClick ? onClick() : null; }} disabled={disabled} id={`fkw-accordion-item--${ID}`} ref={itemRef} tabIndex={0} aria-controls={`fkw-accordion-panel--${ID}`}>
+    <button className={cn(`fkw-accordion-item`, verbose && 'fkw-accordion--verbose', className)} onClick={() => { toggle(), onClick ? onClick() : null; }} disabled={disabled} id={`fkw-accordion-item--${ID}`} ref={itemRef} tabIndex={0} aria-controls={`fkw-accordion-panel--${ID}`} data-fkw-accordion={accordionId}>
       {children}
     </button>
   </ItemContext.Provider>;
