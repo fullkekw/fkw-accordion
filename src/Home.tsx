@@ -68,11 +68,23 @@ const Home: React.FC = () => {
         <AccordionItem>
 
           <AccordionHeader>
-            <p>header</p>
+            <p>Item 1</p>
           </AccordionHeader>
 
           <AccordionPanel>
-            <p>fsdsfdsdfsdf</p>
+            <p>Content 1</p>
+          </AccordionPanel>
+
+        </AccordionItem>
+
+        <AccordionItem>
+
+          <AccordionHeader>
+            <p>Item 1</p>
+          </AccordionHeader>
+
+          <AccordionPanel>
+            <p>Content 1</p>
           </AccordionPanel>
 
         </AccordionItem>
