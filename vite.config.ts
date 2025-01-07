@@ -10,7 +10,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: `${path.resolve()}/src/_package/index.ts`,
-      name: '@fullkekw/accordion',
+      name: '@fullkekw/fkw-accordion',
       fileName: (format) => `index.${format}.js`,
       cssFileName: 'styles'
     },

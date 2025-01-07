@@ -1,0 +1,45 @@
+.fkw-accordion {
+  &-header {
+
+  }
+
+  &-panel {
+    opacity: 0;
+    visibility: collapse;
+    pointer-events: none;
+    touch-action: none;
+    transition: .2s ease-in-out;
+    max-height: 0;
+    overflow: hidden;
+
+    &--active {
+      opacity: 1;
+      visibility: visible;
+      touch-action: auto;
+      pointer-events: auto;
+    }
+  }
+
+  &--verbose {
+    // Item
+    background: green;
+
+    .fkw-accordion {
+      &-header {
+        background: lightblue;
+
+        &--active {
+          background: blue;
+        }
+      }
+
+      &-panel {
+        background: lightcoral;
+
+        &--active {
+          background: coral;
+        }
+      }
+    }
+  }
+}

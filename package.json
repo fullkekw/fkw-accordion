@@ -1,5 +1,5 @@
 {
-  "name": "@fullkekw/accordion",
+  "name": "@fullkekw/fkw-accordion",
   "version": "1.0.0",
   "description": "React accordion typescript component. Compatible with nextjs & vite!",
   "keywords": [

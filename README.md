@@ -1,2 +1,2 @@
-# @fullkekw/accordion
+# @fullkekw/fkw-accordion
 PACKAGE_DESCRIPTION
