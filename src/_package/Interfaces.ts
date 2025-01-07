@@ -12,7 +12,7 @@ export interface IAccordionProps {
   singleOpen?: boolean
 }
 
-export interface IAccordionItemProps {
+export interface IAccordionItemProps extends React.DetailsHTMLAttributes<HTMLDivElement> {
   children: React.ReactNode | React.ReactNode[]
   className?: string
   onClick?: () => void
@@ -26,12 +26,12 @@ export interface IAccordionItemProps {
   stateSetter?: (state: boolean) => void
 }
 
-export interface IAccordionHeaderProps {
+export interface IAccordionHeaderProps extends React.DetailsHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode | React.ReactNode[]
   className?: string
 }
 
-export interface IAccordionPanelProps {
+export interface IAccordionPanelProps extends React.DetailsHTMLAttributes<HTMLDivElement> {
   children: React.ReactNode | React.ReactNode[]
   className?: string
 }

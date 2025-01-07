@@ -18,6 +18,9 @@ interface IItemConext {
   isOpen: boolean
   toggle: () => void
   id: string
+
+  onClick?: () => void
+  disabled: boolean
 }
 
 // @ts-expect-error Context does not require initial state
@@ -27,6 +30,7 @@ const ItemContext = createContext<IItemConext>({});
 
 
 
+/** Accordions context provider */
 export const Accordion: React.FC<IAccordionProps> = ({ children, verbose, singleOpen, id }) => {
   const [ID] = useState(id ?? createStringID(6));
 
@@ -42,8 +46,8 @@ export const Accordion: React.FC<IAccordionProps> = ({ children, verbose, single
   </AccordionContext.Provider>;
 };
 
-/** Must contain AccordionHeader & AccordionPanel */
-export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, className, onClick, disabled, id, state, stateSetter }) => {
+/** Accordion. Must contain AccordionHeader & AccordionPanel */
+export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, className, onClick, disabled, id, state, stateSetter, ...props }) => {
   const accCtx = useContext(AccordionContext);
   const { singleOpen, verbose, id: accordionId } = accCtx;
 
@@ -51,7 +55,9 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
   const [ID] = useState(id ?? createStringID(6));
 
   const paddingsRef = useRef<number[]>([]);
-  const itemRef = useRef<HTMLButtonElement>(null);
+  const itemRef = useRef<HTMLDivElement>(null);
+
+  disabled = disabled ?? false;
 
 
 
@@ -92,7 +98,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
   useEffect(() => {
     if (!singleOpen) return;
 
-    const item = itemRef.current as HTMLButtonElement;
+    const item = itemRef.current as HTMLDivElement;
 
     const observer = new MutationObserver(() => {
       if (item.classList.contains('fkw-accordion--singleOpen')) {
@@ -108,7 +114,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
 
   // Handle isOpen
   useEffect(() => {
-    const item = itemRef.current as HTMLButtonElement;
+    const item = itemRef.current as HTMLDivElement;
     const panel = item.querySelector('.fkw-accordion-panel') as HTMLDivElement;
 
     const paddingY = paddingsRef.current[1];
@@ -117,7 +123,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
       panel.style.maxHeight = `${panel.scrollHeight + (paddingY * 2)}px`;
 
       if (singleOpen) {
-        const items = document.querySelectorAll(`[data-fkw-accordion="${accordionId}"]`) as NodeListOf<HTMLButtonElement>;
+        const items = document.querySelectorAll(`[data-fkw-accordion="${accordionId}"]`) as NodeListOf<HTMLDivElement>;
 
         items.forEach(item => {
           if (item.id === `fkw-accordion-item--${ID}`) return;
@@ -140,6 +146,8 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
 
 
   function toggle(forceState?: boolean) {
+    if (!forceState && disabled) return console.warn(`[fkw-accordion]: Item is disabled and can not change it's state`);
+
     const to = forceState ?? !isOpen;
 
     if (stateSetter !== undefined && state !== undefined) {
@@ -160,28 +168,32 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
   return <ItemContext.Provider value={{
     isOpen,
     toggle,
-    id: ID
+    id: ID,
+    disabled,
+    onClick,
   }}>
-    <button className={cn(`fkw-accordion-item`, verbose && 'fkw-accordion--verbose', className)} onClick={() => { toggle(), onClick ? onClick() : null; }} disabled={disabled} id={`fkw-accordion-item--${ID}`} ref={itemRef} tabIndex={0} aria-controls={`fkw-accordion-panel--${ID}`} data-fkw-accordion={accordionId}>
+    <div className={cn(`fkw-accordion-item`, verbose && 'fkw-accordion--verbose', className)} id={`fkw-accordion-item--${ID}`} ref={itemRef} data-fkw-accordion={accordionId} {...props}>
       {children}
-    </button>
+    </div>
   </ItemContext.Provider>;
 };
 
-export const AccordionHeader: React.FC<IAccordionHeaderProps> = ({ children, className }) => {
+/** Actually, this is a button that change state */
+export const AccordionHeader: React.FC<IAccordionHeaderProps> = ({ children, className, ...props }) => {
   const itemCtx = useContext(ItemContext);
-  const { id, isOpen } = itemCtx;
+  const { id, isOpen, disabled, toggle, onClick } = itemCtx;
 
-  return <div className={cn(`fkw-accordion-header`, isOpen && 'fkw-accordion-header--active', className)} id={`fkw-accordion-header--${id}`}>
+  return <button className={cn(`fkw-accordion-header`, isOpen && 'fkw-accordion-header--active', className)} tabIndex={0} aria-controls={`fkw-accordion-panel--${id}`} id={`fkw-accordion-header--${id}`} onClick={() => { toggle(), onClick ? onClick() : null; }} disabled={disabled} {...props}>
     {children}
-  </div>;
+  </button>;
 };
 
-export const AccordionPanel: React.FC<IAccordionPanelProps> = ({ children, className }) => {
+/** Accordion content */
+export const AccordionPanel: React.FC<IAccordionPanelProps> = ({ children, className, ...props }) => {
   const itemCtx = useContext(ItemContext);
   const { id, isOpen } = itemCtx;
 
-  return <div className={cn(`fkw-accordion-panel`, isOpen && 'fkw-accordion-panel--active', className)} id={`fkw-accordion-panel--${id}`} tabIndex={0} role='region' aria-hidden={isOpen} aria-labelledby={`fkw-accordion-item--${id}`}>
+  return <div className={cn(`fkw-accordion-panel`, isOpen && 'fkw-accordion-panel--active', className)} id={`fkw-accordion-panel--${id}`} tabIndex={0} role='region' aria-hidden={isOpen} aria-labelledby={`fkw-accordion-item--${id}`} {...props}>
     {children}
   </div>;
 };

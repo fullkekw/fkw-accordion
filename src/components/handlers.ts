@@ -1,6 +1,6 @@
 export class EFKW extends Error {
   constructor(msg: string) {
-    super(`[@fullkekw/fkw-accordion]: ${msg}`);
+    super(`[fkw-accordion]: ${msg}`);
   }
 }
 
