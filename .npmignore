@@ -1,0 +1,13 @@
+src
+node_modules
+.git
+.eslintrc.cjs
+.gitignore
+index.html
+index.ts
+postcss.config.json
+tailwing.config.js
+tsconfig.json
+tsconfig.node.json
+vite.config.json
+dist/src

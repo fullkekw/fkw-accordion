@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    /* Linting */
+    "strict": true,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "declaration": true,
+    "typeRoots": [
+      "./dist/_package/index.d.ts"
+    ]
+  },
+  "include": [
+    "src",
+    "src/_package/index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/components",
+    "src/interfaces",
+    "src/styles",
+    "src/Home.tsx",
+    "src/main.tsx",
+    "src/Router.tsx",
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

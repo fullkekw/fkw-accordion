@@ -1,0 +1,62 @@
+{
+  "name": "@fullkekw/accordion",
+  "version": "1.0.0",
+  "description": "React accordion typescript component. Compatible with nextjs & vite!",
+  "keywords": [
+    "fkw",
+    "fullkekw"
+  ],
+  "license": "MIT",
+  "author": "unniiiverse",
+  "type": "module",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/_package/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/_package/index.d.ts",
+        "default": "./dist/index.es.js"
+      },
+      "require": {
+        "types": "./dist/_package/index.d.ts",
+        "default": "./dist/index.umd.js"
+      }
+    },
+    "./css": "./dist/styles.css"
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "dev": "npx eslint . --fix --ext .ts,.tsx && npx vite",
+    "build": "npx rimraf dist && npx tsc && npx vite build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "@vitejs/plugin-react-swc": "^3.7.2",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.38.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.3.4",
+    "postcss": "^8.4.31",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.24.0",
+    "rimraf": "^6.0.1",
+    "sass": "^1.69.5",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.0.2",
+    "vite": "^6.0.5",
+    "vite-plugin-dts": "^3.7.0"
+  },
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "react": "^18.2.0"
+  }
+}
