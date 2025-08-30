@@ -120,6 +120,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
     const paddingY = paddingsRef.current[1];
 
     if (isOpen) {
+      panel.style.padding = `${paddingY}px ${paddingsRef.current[0]}px`;
       panel.style.maxHeight = `${panel.scrollHeight + (paddingY * 2)}px`;
 
       if (singleOpen) {
@@ -132,6 +133,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
         });
       }
     } else {
+      panel.style.padding = `0 ${paddingsRef.current[0]}px`;
       panel.style.maxHeight = `0px`;
     }
   }, [isOpen]);
