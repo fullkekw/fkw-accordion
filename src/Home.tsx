@@ -15,7 +15,7 @@ const Home: React.FC = () => {
       </button>
 
       <Accordion verbose singleOpen>
-        <AccordionItem state={state} stateSetter={setState}>
+        <AccordionItem state={state} stateSetter={setState} panelTransitionTimingModifier={2}>
 
           <AccordionHeader>
             <p>header</p>

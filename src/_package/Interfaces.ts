@@ -24,6 +24,14 @@ export interface IAccordionItemProps extends React.DetailsHTMLAttributes<HTMLDiv
 
   /** Sync out state with current accordion state */
   stateSetter?: (state: boolean) => void
+
+  /** 
+   * Defines transition timing modifier per 100px, where 1px = 1ms * modifier. 
+   * Transition can be disabled by passing null 
+   * 
+   * @default 1
+   */
+  panelTransitionTimingModifier?: number | null
 }
 
 export interface IAccordionHeaderProps extends React.DetailsHTMLAttributes<HTMLButtonElement> {

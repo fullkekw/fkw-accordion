@@ -47,7 +47,7 @@ export const Accordion: React.FC<IAccordionProps> = ({ children, verbose, single
 };
 
 /** Accordion. Must contain AccordionHeader & AccordionPanel */
-export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, className, onClick, disabled, id, state, stateSetter, ...props }) => {
+export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, className, onClick, disabled, id, state, stateSetter, panelTransitionTimingModifier, ...props }) => {
   const accCtx = useContext(AccordionContext);
   const { singleOpen, verbose, id: accordionId } = accCtx;
 
@@ -57,6 +57,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
   const paddingsRef = useRef<number[]>([]);
   const itemRef = useRef<HTMLDivElement>(null);
 
+  panelTransitionTimingModifier = panelTransitionTimingModifier === null ? null : panelTransitionTimingModifier ?? 1;
   disabled = disabled ?? false;
 
 
@@ -90,7 +91,11 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
 
     // Prevent transition
     setTimeout(() => {
+      if (panelTransitionTimingModifier === null) return;
+
+      console.log('fsdsdf');
       panel.style.transition = transition;
+      panel.style.transitionDuration = `${(panel.scrollHeight + (paddingY * 2)) * panelTransitionTimingModifier}ms`;
     }, 1);
   }, []);
 
