@@ -91,11 +91,10 @@ export const AccordionItem: React.FC<IAccordionItemProps> = ({ children, classNa
 
     // Prevent transition
     setTimeout(() => {
-      if (panelTransitionTimingModifier === null) return;
-
-      console.log('fsdsdf');
-      panel.style.transition = transition;
-      panel.style.transitionDuration = `${(panel.scrollHeight + (paddingY * 2)) * panelTransitionTimingModifier}ms`;
+      if (panelTransitionTimingModifier !== null) {
+        panel.style.transition = transition;
+        panel.style.transitionDuration = `${(panel.scrollHeight + (paddingY * 2)) * panelTransitionTimingModifier!}ms`;
+      }
     }, 1);
   }, []);
 
