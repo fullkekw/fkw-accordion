@@ -1,3 +1,7 @@
+# 🛑 DEPRECATED 🛑
+
+This package is reworked into [@fullkekw/accordion](https://github.com/fullkekw/accordion) and no longer be supported
+
 React accordion typescript component. Compatible with nextjs & vite!
 
 ## Features
